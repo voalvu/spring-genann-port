@@ -1,3 +1,14 @@
 Output/
 Some/
+*.log
+
 target/
+*.class
+.idea/
+*.iml
+.vscode/
+
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+
