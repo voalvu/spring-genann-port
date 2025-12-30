@@ -1,5 +1,6 @@
 package com.ai.service;
 
+import com.ai.api.StatusResponse;
 import com.ai.core.GenAnn;
 import com.ai.entity.TrainingLog;
 import com.ai.repo.TrainingLogRepository;
@@ -64,6 +65,7 @@ public class NeuralNetService {
     // --- GENERATORS ---
 
     public void generateSomeShapeDataset(Point2D.Double[] shapePoints) throws IOException {
+        Files.createDirectories(Paths.get(SOME_DIR));
         clearData();
         isCustomMode = true;
         customOutputSize = shapePoints.length * 2; // x and y for every point
@@ -94,6 +96,7 @@ public class NeuralNetService {
     }
 
     private void generateDefaultDataset() throws IOException {
+        Files.createDirectories(Paths.get(OUTPUT_DIR));
         clearData();
         isCustomMode = false;
         Random r = new Random();
