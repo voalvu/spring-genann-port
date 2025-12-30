@@ -1,0 +1,14 @@
+<div class="canvas-container">
+  <h3>Draw Polygon</h3>
+  <p class="hint" *ngIf="!isClosed">Click to add points. Click the start point to close.</p>
+  <p class="hint success" *ngIf="isClosed">Polygon Closed!</p>
+
+  <canvas #canvas class="drawing-surface"></canvas>
+
+  <div class="actions">
+    <button (click)="reset()" class="btn secondary">Reset</button>
+    <button (click)="exportData()" [disabled]="!isClosed" class="btn primary">
+      Send to API
+    </button>
+  </div>
+</div>
