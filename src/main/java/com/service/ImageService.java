@@ -86,4 +86,21 @@ public class ImageService {
         }
         return inputs;
     }
+
+    public double[] bufferToDownsampledArray(BufferedImage img) {
+    double[] inputs = new double[32 * 32];
+    double scaleX = (double) img.getWidth() / 32;
+    double scaleY = (double) img.getHeight() / 32;
+
+    for (int y = 0; y < 32; y++) {
+        for (int x = 0; x < 32; x++) {
+            int srcX = (int) (x * scaleX);
+            int srcY = (int) (y * scaleY);
+            int rgb = img.getRGB(srcX, srcY);
+            int red = (rgb >> 16) & 0xFF;
+            inputs[y * 32 + x] = red / 255.0; // Note: Not inverted this time, assumes black BG
+        }
+    }
+    return inputs;
+}
 }

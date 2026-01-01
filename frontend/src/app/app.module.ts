@@ -4,11 +4,13 @@ import { HttpClientModule } from '@angular/common/http'; // <--- ADD THIS
 
 import { AppComponent } from './app.component';
 import { PolygonCanvas } from './polygon-canvas/polygon-canvas';
+import { PuzzleSolver } from './puzzle-solver/puzzle-solver';
 
 @NgModule({
   declarations: [
     AppComponent,
-    PolygonCanvas
+    PolygonCanvas,
+    PuzzleSolver
   ],
   imports: [
     BrowserModule,

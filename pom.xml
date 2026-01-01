@@ -8,7 +8,6 @@
     <artifactId>java-ported-ppm</artifactId>
     <version>1</version>
 
-    <!-- 1. Add Spring Boot Parent so dependencies don't need explicit versions -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -20,7 +19,6 @@
         <java.version>17</java.version>
     </properties>
 
-    <!-- 2. Dependencies must be INSIDE the project tag -->
     <dependencies>
         <dependency>
             <groupId>math.geom2d</groupId>
@@ -53,13 +51,29 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-        <!-- Added test starter for good measure -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+    <groupId>org.tomlj</groupId>
+    <artifactId>tomlj</artifactId>
+    <version>1.1.0</version> <!-- Version commonly used with recent FFDec -->
+</dependency>
+        <dependency>
+            <groupId>com.jindrapetrik</groupId>
+            <artifactId>ffdec_lib</artifactId>
+            <version>24.1.1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/ffdec_lib.jar</systemPath>
+        </dependency>
+
+  
+    
     </dependencies>
+
+
 
     <build>
         <plugins>

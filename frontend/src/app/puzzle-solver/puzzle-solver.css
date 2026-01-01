@@ -1,0 +1,77 @@
+.photoshop-container {
+  display: flex;
+  flex-direction: column;
+  background: #2b2b2b; /* Photoshop Grey */
+  padding: 10px;
+  border-radius: 8px;
+  color: white;
+}
+
+.viewport {
+  position: relative;
+  width: 600px;
+  height: 400px;
+  background: #111;
+  border: 1px solid #444;
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+canvas {
+  position: absolute;
+  top: 0; left: 0;
+  z-index: 1;
+}
+
+/* The Veil */
+.veil {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* 50% Black overlay */
+  z-index: 2;
+  pointer-events: none; /* Let clicks pass through */
+}
+
+/* The "Hole" or Focus Area (Photoshop selection look) */
+.focus-box {
+  position: absolute;
+  border: 1px dashed white;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5); /* This creates the "inverse" veil */
+  z-index: 3;
+}
+
+.result-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  z-index: 4;
+  opacity: 0.8;
+  mix-blend-mode: screen;
+}
+
+
+.viewport.dragging {
+  border: 2px dashed #00aeff;
+  background: #222;
+}
+
+.drag-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 174, 255, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  pointer-events: none;
+  font-size: 24px;
+  font-weight: bold;
+  color: #00aeff;
+}
+
+.file-status {
+  color: #aaa;
+  font-size: 0.9em;
+  margin-right: auto;
+}

@@ -1,0 +1,28 @@
+<div class="photoshop-container" 
+     (paste)="handlePaste($event)"
+     (dragover)="onDragOver($event)"
+     (dragleave)="onDragLeave($event)"
+     (drop)="onDrop($event)">
+  
+  <div class="toolbar">
+    <div class="file-status" *ngIf="importedShapeName">
+       Loaded SWF: <strong>{{ importedShapeName }}</strong>
+    </div>
+    <button (click)="solvePuzzle()" [disabled]="!hasImage || !importedShapeName">Fit Shape to Image</button>
+  </div>
+
+  <div class="viewport" [class.dragging]="isDragging">
+    <!-- Overlay message when dragging -->
+    <div class="drag-overlay" *ngIf="isDragging">
+      <span>DROP SWF FILE HERE</span>
+    </div>
+
+    <canvas #mainCanvas width="600" height="400"></canvas>
+
+    <!-- Visualizer for the imported SWF Shape (Preview) -->
+    <!-- We draw this purely via JS on the canvas, but we can overlay a hint -->
+    <div class="shape-preview-hint" *ngIf="importedShapeName">
+        Shape Ready
+    </div>
+  </div>
+</div>
