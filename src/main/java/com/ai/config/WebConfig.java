@@ -11,7 +11,7 @@ public class WebConfig implements WebMvcConfigurer {
     
     // Relaxed Binding gets the current URL from Azure secrets (server environment variables)
     // https://docs.spring.io/spring-boot/reference/features/external-config.html#features.external-config.typesafe-configuration-properties.relaxed-binding
-    @Value("${cors.allowed.origins:http://localhost:4200}")
+    @Value("${cors.allowed.origins:http://localhost:8080}")
     private String allowedOrigins;    
     
     @Override
@@ -26,10 +26,12 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
+
+        String[] origins = allowedOrigins != null ? allowedOrigins.split(",") : new String[]{"http://localhost:4200"};
+
         registry.addMapping("/**")
-                .allowedOrigins(allowedOrigins.split(","))
+                .allowedOriginPatterns(origins)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true);
+                .allowedHeaders("*");
     }
 }
