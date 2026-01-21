@@ -1,6 +1,7 @@
 import { Component, ElementRef, ViewChild, ViewChildren, QueryList, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-// --- INTERFACES ---
+import { environment } from '../../environments/environment';
+
 interface VectorCommand {
   type: string; x: number; y: number; cx?: number; cy?: number;
   fillColor?: string; strokeColor?: string; lineWidth?: number;
@@ -72,7 +73,7 @@ if(localStorage.getItem("cachedSwfShape")!= null){
 uploadSwf(file: File) {
 const formData = new FormData();
     formData.append('file', file);
-    this.http.post<SwfResponse>('http://localhost:8080/api/swf/upload', formData).subscribe({
+    this.http.post<SwfResponse>(`${environment.apiUrl}/api/swf/upload`, formData).subscribe({
 next: (res) => {
         this.importedShapeName = res.name;
         this.swfShapes = res.shapes;
@@ -720,10 +721,10 @@ solvePuzzle() {
     this.canvasRef.nativeElement.toBlob((blob) => {
 const formData = new FormData();
       formData.append('screenshot', blob!, 'screen.png');
-      this.http.post('http://localhost:8080/api/puzzle/solve', formData)
+      this.http.post(`${environment.apiUrl}/api/puzzle/solve`, formData)
 .subscribe(() => {
 setTimeout(() => {
-            this.resultUrl = 'http://localhost:8080/custom/puzzle_solved.png?t=' + Date.now();
+            this.resultUrl = `${environment.apiUrl}/custom/puzzle_solved.png?t=` + Date.now();
 }, 5000);
 });
 });

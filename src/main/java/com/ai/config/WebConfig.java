@@ -7,7 +7,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-
+    
+    // Relaxed Binding gets the current URL from Azure secrets (server environment variables)
+    // https://docs.spring.io/spring-boot/reference/features/external-config.html#features.external-config.typesafe-configuration-properties.relaxed-binding
+    @Value("${cors.allowed.origins:http://localhost:4200}")
+    private String allowedOrigins;    
+    
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // Maps the URL path "/images/**" to the physical "Output" folder
@@ -20,9 +25,10 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        // Allow the Angular dev server (usually port 4200) to talk to Spring
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:4200")
-                .allowedMethods("*");
+                .allowedOrigins(allowedOrigins.split(","))
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true);
     }
 }
