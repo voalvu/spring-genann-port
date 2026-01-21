@@ -1,0 +1,27 @@
+services:
+  backend:
+    image: maven:3.9.9-eclipse-temurin-17
+    working_dir: /app
+    volumes:
+      - .:/app
+      - maven_repo:/root/.m2
+    command: mvn spring-boot:run
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DEVTOOLS_RESTART_ENABLED=true
+
+  frontend:
+    image: node:22
+    working_dir: /app/frontend
+    volumes:
+      - ./frontend:/app/frontend
+      - /app/frontend/node_modules
+    command: sh -c "npm install && npm start -- --host 0.0.0.0 --poll 2000"
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
+
+volumes:
+  maven_repo:

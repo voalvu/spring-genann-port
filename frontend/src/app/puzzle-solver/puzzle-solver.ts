@@ -29,6 +29,8 @@ export class PuzzleSolver {
   importedShapeName: string | null = null;
   swfShapes: SwfShape[] = [];
   swfSprites: SwfSprite[] = [];
+  screenHeight: number | null = null;
+  screenWidth: number | null = null;
 readonly CELL_SIZE = 150;
 readonly PADDING = 20;
   showColors = true;
@@ -47,7 +49,15 @@ public layers: {commands: VectorCommand[], visible: boolean}[] = [];
 private shapeVersions: { [key: number]: { original: VectorCommand[], versions: ShapeVersion[] } } = {};
 public currentVersions: ShapeVersion[] = [];
 public selectedVersionIndex: number | null = null;
+
 constructor(private http: HttpClient) {
+  this.onResize(event);
+}
+@HostListener('window:resize', ['$event'])
+onResize(event?: Event) {
+   this.screenHeight = window.innerHeight;
+   this.screenWidth = window.innerWidth;
+   console.log(this.screenHeight,this.screenWidth)
 }
 loadFromCache(){
 if(localStorage.getItem("cachedSwfShape")!= null){
@@ -69,6 +79,11 @@ next: (res) => {
         this.swfSprites = res.sprites;
         this.symbolMap = res.symbolMap || {};
         this.drawAtlas();
+        const dragOverlay = document.querySelector(".drag-overlay") as HTMLElement;
+        const drophere = document.getElementById("drop-here-annotation");
+        dragOverlay ? dragOverlay.style.display = "none" : null;
+        drophere ? drophere.style.display = "none" : null;
+
 },
 error: (err) => console.error(err)
 });
@@ -86,7 +101,7 @@ const fontSize = 32;
 // --- GLOBAL MOUSE EVENTS ---
 @HostListener('document:mousemove', ['$event'])
 onMouseMove(e: MouseEvent) {
-    console.log(e,this.selectedPointIndex,this.isDragging && this.selectedShape)
+    //console.log(e,this.selectedPointIndex,this.isDragging && this.selectedShape)
 if (this.isDragging && this.selectedShape) {
       console.log('mouse moving with shape')
 // Dragging the whole shape with middle mouse (button 1)
@@ -509,7 +524,7 @@ drawAtlas() {
     this.atlasDrawn = true;
 const cvs = this.canvasRef.nativeElement;
 const ctx = cvs.getContext('2d')!;
-const viewWidth = 1920;
+const viewWidth = this.screenWidth ? this.screenWidth/3*2 : 1920;
 const cols = Math.floor(viewWidth / this.CELL_SIZE);
 const rows = this.swfShapes.length > 0 ? Math.ceil(this.swfShapes.length / cols) : 1;
 const newHeight = Math.max(1080, rows * this.CELL_SIZE);
@@ -584,9 +599,9 @@ if (name) {
         ctx.fillText(`ID:${shape.charId}`, cellX + 5, cellY + 15);
 }
 // Draw ID
-      ctx.fillStyle = '#aaa';
-      ctx.font = '10px Arial';
-      ctx.fillText(`ID:${shape.charId}`, cellX + 5, cellY + 12);
+      //ctx.fillStyle = '#aaa';
+      //ctx.font = '10px Arial';
+      //ctx.fillText(`ID:${shape.charId}`, cellX + 5, cellY + 12);
       colIndex++;
 if (colIndex >= cols) { colIndex = 0; rowIndex++; }
 });
