@@ -6,23 +6,80 @@
   
   <div class="toolbar">
     <div class="file-status" *ngIf="importedShapeName">
-       Loaded SWF: <strong>{{ importedShapeName }}</strong>
+       Loaded: <strong>{{ importedShapeName }}</strong>
+       <span *ngIf="swfShapes.length"> | Shapes: {{swfShapes.length}}</span>
+       <span *ngIf="swfSprites.length"> | Sprites: {{swfSprites.length}}</span>
     </div>
+    
+    <label class="toggle-label">
+      <input type="checkbox" [(ngModel)]="showColors" (change)="drawAtlas()">
+      Show Colors
+    </label>
+
     <button (click)="solvePuzzle()" [disabled]="!hasImage || !importedShapeName">Fit Shape to Image</button>
+    <button (click)="loadFromCache()"> Load cache</button>
   </div>
+  <div style="display:flex">
+    <div class="viewport" > <!--[class.dragging]="isDragging"-->
+      <div class="drag-overlay" > <!--*ngIf="isDragging"-->
+        <span>DROP SWF FILE HERE</span>
+      </div>
 
-  <div class="viewport" [class.dragging]="isDragging">
-    <!-- Overlay message when dragging -->
-    <div class="drag-overlay" *ngIf="isDragging">
-      <span>DROP SWF FILE HERE</span>
+      <canvas #mainCanvas width=960 height="1080"></canvas>
+
+      <div class="shape-preview-hint" *ngIf="importedShapeName">
+          Shape Ready
+      </div>
     </div>
 
-    <canvas #mainCanvas width="600" height="400"></canvas>
+    <app-sprite-viewer 
+      *ngIf="swfShapes.length > 0"
+      [shapes]="swfShapes" 
+      [sprites]="swfSprites"
+      [symbolMap]="symbolMap">
 
-    <!-- Visualizer for the imported SWF Shape (Preview) -->
-    <!-- We draw this purely via JS on the canvas, but we can overlay a hint -->
-    <div class="shape-preview-hint" *ngIf="importedShapeName">
-        Shape Ready
+    </app-sprite-viewer>
+  </div>
+
+<div id="editSprite" style="display: flex;">
+  <canvas #editCanvas 
+          width="450" 
+          height="450"
+          class="interactive-canvas"
+          (mousedown)="onEditCanvasMouseDown($event)"
+          (contextmenu)="$event.preventDefault()" 
+          (auxclick)="$event.preventDefault()">
+  </canvas>
+  <div class="layers-panel" style="padding: 10px; max-height: 450px; overflow-y: auto;">
+  <div *ngFor="let layer of layers; let i = index" class="layer">
+    <canvas #layerPreview width="100" height="100"></canvas>
+    <label>
+      <input type="checkbox" [(ngModel)]="layer.visible" (change)="updateEditCanvas()">
+      Layer {{i + 1}}
+    </label>
+    <div *ngIf="layer.commands[0] && layer.commands[0].fillColor">
+      Fill: <input type="color" [value]="layer.commands[0].fillColor" (input)="updateLayerColor(i, 'fill', $event.target.value)">
+    </div>
+    <div *ngIf="layer.commands[0] && layer.commands[0].strokeColor">
+      Stroke: <input type="color" [value]="layer.commands[0].strokeColor" (input)="updateLayerColor(i, 'stroke', $event.target.value)">
     </div>
   </div>
+</div>
+<div class="versions-panel" style="padding: 10px;">
+  <h3>Versions</h3>
+  <button (click)="revertToOriginal()">Original</button>
+  <div *ngFor="let version of currentVersions; let i = index">
+    <button (click)="loadVersion(i)">{{version.name}}</button>
+  </div>
+  <button (click)="saveVersion()">Save New Version</button>
+</div>
+<div class="point-editor" style="padding: 10px;">
+  <div *ngIf="selectedPointIndex">
+    <h3>{{ selectedPointIndex.isControl ? 'Control Point' : 'End Point' }}</h3>
+    <label>X: <input type="number" [(ngModel)]="selectedX" (ngModelChange)="updatePointFromInputs()"></label>
+    <label>Y: <input type="number" [(ngModel)]="selectedY" (ngModelChange)="updatePointFromInputs()"></label>
+  </div>
+</div>
+</div>
+
 </div>

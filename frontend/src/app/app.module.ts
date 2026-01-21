@@ -1,22 +1,26 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http'; // <--- ADD THIS
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms'; // <--- 1. IMPORT THIS
 
-import { AppComponent } from './app.component';
-import { PolygonCanvas } from './polygon-canvas/polygon-canvas';
+import { App } from './app';
+//import { PolygonCanvas } from './polygon-canvas/polygon-canvas';
 import { PuzzleSolver } from './puzzle-solver/puzzle-solver';
+import { SpriteViewer } from './sprite-viewer/sprite-viewer';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    PolygonCanvas,
-    PuzzleSolver
+    App,
+  //  PolygonCanvas,
+    PuzzleSolver,
+    SpriteViewer
   ],
   imports: [
     BrowserModule,
-    HttpClientModule // <--- ADD THIS
+    HttpClientModule,
+    FormsModule // <--- 2. ADD THIS
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [App]
 })
 export class AppModule { }

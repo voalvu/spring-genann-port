@@ -9,17 +9,18 @@
 
 .viewport {
   position: relative;
-  width: 600px;
-  height: 400px;
+  width: 50%; /* Fill container */
+  height: 600px;
   background: #111;
   border: 1px solid #444;
-  overflow: hidden;
+  overflow: auto;
   cursor: crosshair;
 }
 
 canvas {
-  position: absolute;
-  top: 0; left: 0;
+  /* Remove absolute positioning so it flows in the scroll container */
+  display: block; 
+  /* z-index is still useful if we add overlays later */
   z-index: 1;
 }
 

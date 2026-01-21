@@ -1,0 +1,40 @@
+    
+<div class="sprite-viewer-container">
+  <div class="header-row">
+    <h3>Sprite Inspector</h3>
+    <div class="toggle-wrapper">
+      <input type="checkbox" id="chkTransform" [(ngModel)]="enableTransforms" (change)="renderFrame()">
+      <label for="chkTransform">Apply Matrix Transforms</label>
+    </div>
+  </div>
+
+  <div class="controls">
+    <label>Select Asset:</label>
+    <select [ngModel]="selectedSpriteId" (ngModelChange)="selectSprite($event)">
+      <option *ngFor="let s of sprites" [value]="s.spriteId">
+        {{ getDisplayName(s.spriteId) }} [{{s.frames.length}} fr]
+      </option>
+    </select>
+
+    <div class="playback">
+      <button (click)="prevFrame()">Prev</button>
+      <span>Frame: {{currentFrameIndex + 1}} / {{maxFrameIndex + 1}}</span>
+      <button (click)="nextFrame()">Next</button>
+      
+      <input type="range" 
+             [min]="0" 
+             [max]="maxFrameIndex"
+             [(ngModel)]="currentFrameIndex" 
+             (input)="renderFrame()">
+    </div>
+  </div>
+
+  <div class="canvas-wrapper">
+    <canvas #spriteCanvas width="600" height="400"></canvas>
+    <div class="overlay-info" *ngIf="selectedSprite">
+      Objects: {{ selectedSprite.frames[currentFrameIndex]?.length || 0 }}
+    </div>
+  </div>
+</div>
+
+  
